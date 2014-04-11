@@ -1,4 +1,4 @@
-november
-========
+# Picture uploads
+Just a simple little project to upload pictures to a given flickr account.
 
-A flickr uploading util
+Intended to be run via cron
