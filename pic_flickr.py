@@ -8,10 +8,14 @@ import sys
 import json
 
 
-def main(flickr, files):
+def main(flickr, files, pic_log):
     print("Files: %s " % files)
     for f in files:
-        flickr.upload(filename=f, tags="commit_pics")
+        if f not in pic_log:
+            flickr.upload(filename=f, tags="commit_pics")
+            pic_log.append(f)
+    with open(sys.argv[1] + ".log", "w") as log:
+        log.write(json.dumps(pic_log))
 
 
 if __name__ == '__main__':
@@ -20,6 +24,7 @@ if __name__ == '__main__':
         exit(-1)
     #Get API key
     jdata = json.load(open(sys.argv[1]))
+    pic_log = json.load(open(sys.argv[1] + ".log"))
     api_key = jdata.get("key")
     api_secret = jdata.get("secret")
     print(sys.argv)
@@ -28,4 +33,4 @@ if __name__ == '__main__':
     if not token: raw_input("Press ENTER after you authorized this program")
     flickr.get_token_part_two((token, frob))
     files = sys.argv[2:]
-    main(flickr, files)
+    main(flickr, files, pic_log)
