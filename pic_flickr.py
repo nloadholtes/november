@@ -9,9 +9,9 @@ import json
 
 
 def main(flickr, files, pic_log):
-    print("Files: %s " % files)
     for f in files:
         if f not in pic_log:
+            print("Uploading %s" % f)
             flickr.upload(filename=f, tags="commit_pics")
             pic_log.append(f)
     with open(sys.argv[1] + ".log", "w") as log:
@@ -27,7 +27,6 @@ if __name__ == '__main__':
     pic_log = json.load(open(sys.argv[1] + ".log"))
     api_key = jdata.get("key")
     api_secret = jdata.get("secret")
-    print(sys.argv)
     flickr = flickrapi.FlickrAPI(api_key, api_secret)
     (token, frob) = flickr.get_token_part_one(perms='write')
     if not token: raw_input("Press ENTER after you authorized this program")
