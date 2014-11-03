@@ -21,11 +21,11 @@ def main(flickr, files, pic_log):
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
-    ap.add_argument('-f', '--filename', required=True, help="The JSON file detailing what we've uploaded")
-    # ap.add_argument('-a', '--apikey', required=True, help="The flickr API key")
+    ap.add_argument('-a', '--apikey', required=True, help="The JSON file detailing our API key")
+    ap.add_argument('-f', '--files', nargs="*", required=True, help="The files that can be uploaded")
     args = ap.parse_args()
-    jdata = json.load(open(args.filename))
-    pic_log = json.load(open(args.filename + ".log"))
+    jdata = json.load(open(args.apikey))
+    pic_log = json.load(open(args.apikey + ".log"))
     api_key = jdata.get("key")
     api_secret = jdata.get("secret")
     flickr = flickrapi.FlickrAPI(api_key, api_secret)
@@ -34,4 +34,4 @@ if __name__ == '__main__':
         raw_input("Press ENTER after you authorized this program")
     flickr.get_token_part_two((token, frob))
     files = sys.argv[2:]
-    main(flickr, files, pic_log)
+    main(flickr, args.files, pic_log)
