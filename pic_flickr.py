@@ -6,6 +6,7 @@
 import flickrapi
 import sys
 import json
+import argparse
 
 
 def main(flickr, files, pic_log):
@@ -19,17 +20,18 @@ def main(flickr, files, pic_log):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        print("Need path to the json-formatted api key/secret and then some name(s)")
-        exit(-1)
-    #Get API key
-    jdata = json.load(open(sys.argv[1]))
-    pic_log = json.load(open(sys.argv[1] + ".log"))
+    ap = argparse.ArgumentParser()
+    ap.add_argument('-f', '--filename', required=True, help="The JSON file detailing what we've uploaded")
+    # ap.add_argument('-a', '--apikey', required=True, help="The flickr API key")
+    args = ap.parse_args()
+    jdata = json.load(open(args.filename))
+    pic_log = json.load(open(args.filename + ".log"))
     api_key = jdata.get("key")
     api_secret = jdata.get("secret")
     flickr = flickrapi.FlickrAPI(api_key, api_secret)
     (token, frob) = flickr.get_token_part_one(perms='write')
-    if not token: raw_input("Press ENTER after you authorized this program")
+    if not token:
+        raw_input("Press ENTER after you authorized this program")
     flickr.get_token_part_two((token, frob))
     files = sys.argv[2:]
     main(flickr, files, pic_log)
