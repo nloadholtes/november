@@ -33,5 +33,4 @@ if __name__ == '__main__':
     if not token:
         raw_input("Press ENTER after you authorized this program")
     flickr.get_token_part_two((token, frob))
-    files = sys.argv[2:]
     main(flickr, args.files, pic_log)
