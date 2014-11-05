@@ -4,18 +4,17 @@
 # Given a picture, upload it to flickr
 #
 import flickrapi
-import sys
 import json
 import argparse
 
 
-def main(flickr, files, pic_log):
+def main(flickr, files, pic_log, pic_log_name):
     for f in files:
         if f not in pic_log:
             print("Uploading %s" % f)
             flickr.upload(filename=f, tags="commit_pics")
             pic_log.append(f)
-    with open(sys.argv[1] + ".log", "w") as log:
+    with open(pic_log_name, "w") as log:
         log.write(json.dumps(pic_log))
 
 
@@ -33,4 +32,4 @@ if __name__ == '__main__':
     if not token:
         raw_input("Press ENTER after you authorized this program")
     flickr.get_token_part_two((token, frob))
-    main(flickr, args.files, pic_log)
+    main(flickr, args.files, pic_log, args.apikey + ".log")
